@@ -1,4 +1,4 @@
-# Minimal JTAG TAP Controller Integration with VSDSquadron RISC-V RTL
+# Minimal JTAG TAP Controller Simulation
 
 ## Overview
 
