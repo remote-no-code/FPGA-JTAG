@@ -168,6 +168,22 @@ gtkwave jtag_tap.vcd
 
 ---
 
+# Simulation Results
+
+## Terminal Output
+![Terminal](./Task-1/JTAG-Terminal-op.png)
+
+## GTKWave Verification
+![GTKWAVE](./Task-1/JTG-gtk-op.png)
+
+The waveform confirms:
+
+Correct TAP FSM transitions
+Successful IR shifting
+IDCODE loading
+DR shifting
+Serial TDO behavior
+
 # Important Signals Observed
 
 | Signal   | Description                |
@@ -192,9 +208,9 @@ The design supports:
 * IR/DR shifting
 * Serial TDO output
 
-Waveform analysis confirmed correct JTAG behavior and successful integration with the RISC-V RTL environment.
+Waveform analysis confirmed correct JTAG behavior.
 
-A simplified JTAG TAP controller was successfully implemented and integrated with a RISC-V RTL environment.
+A simplified JTAG TAP controller was successfully implemented and simulated.
 
 The design supports:
 
@@ -206,4 +222,3 @@ The design supports:
 
 Simulation verified correct JTAG behavior using GTKWave waveforms.
 
-This project serves as a foundational educational implementation for understanding JTAG-based debug architectures in digital systems.
