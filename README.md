@@ -174,7 +174,7 @@ gtkwave jtag_tap.vcd
 ![Terminal](./Task-1/JTAG-Terminal-op.png)
 
 ## GTKWave Verification
-![GTKWAVE](./Task-1/JTG-gtk-op.png)
+![GTKWAVE](./Task-1/JTAG-gtk-op.png)
 
 The waveform confirms:
 
