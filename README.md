@@ -178,11 +178,11 @@ gtkwave jtag_tap.vcd
 
 The waveform confirms:
 
-Correct TAP FSM transitions
-Successful IR shifting
-IDCODE loading
-DR shifting
-Serial TDO behavior
+* Correct TAP FSM transitions
+* Successful IR shifting
+* IDCODE loading
+* DR shifting
+* Serial TDO behavior
 
 # Important Signals Observed
 
