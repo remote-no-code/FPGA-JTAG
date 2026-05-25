@@ -2,26 +2,35 @@
 
 ## Overview
 
-This project demonstrates the implementation of a simplified JTAG TAP (Test Access Port) controller.
+This project demonstrates the implementation of a JTAG TAP (Test Access Port) controller.
 
 The project focuses on:
 
 * Understanding JTAG architecture
-* Implementing a TAP FSM
+* Implementing a TAP finite state machine (FSM)
 * Supporting IDCODE and BYPASS instructions
-* Verifying JTAG operation in simulation
-  
+* Verifying JTAG operation using simulation
+* Understanding serial shifting and scan-chain behavior
+
 ---
 
 # JTAG Basics
 
-JTAG (Joint Test Action Group) is a serial debug and test interface.
+JTAG (Joint Test Action Group) is a serial debug and testing interface.
+
+It is commonly used for:
+
+* FPGA programming
+* CPU debugging
+* Embedded system testing
+* Boundary scan testing
+
 Basic JTAG signals:
 
 | Signal | Purpose            |
 | ------ | ------------------ |
 | TCK    | JTAG clock         |
-| TMS    | TAP state control  |
+| TMS    | TAP FSM control    |
 | TDI    | Serial data input  |
 | TDO    | Serial data output |
 | TRST   | TAP reset          |
@@ -32,16 +41,28 @@ Basic JTAG signals:
 
 The TAP controller is implemented as a finite state machine (FSM).
 
-Implemented states:
+This implementation uses the standard 16-state IEEE 1149.1 TAP architecture.
+
+Implemented states include:
 
 * TEST_LOGIC_RESET
 * RUN_TEST_IDLE
-* SHIFT_IR
-* UPDATE_IR
+* SELECT_DR_SCAN
+* CAPTURE_DR
 * SHIFT_DR
+* EXIT1_DR
+* PAUSE_DR
+* EXIT2_DR
 * UPDATE_DR
+* SELECT_IR_SCAN
+* CAPTURE_IR
+* SHIFT_IR
+* EXIT1_IR
+* PAUSE_IR
+* EXIT2_IR
+* UPDATE_IR
 
-The TAP FSM is controlled using the TMS signal.
+The FSM transitions are controlled using the `TMS` signal.
 
 ---
 
@@ -49,7 +70,19 @@ The TAP FSM is controlled using the TMS signal.
 
 ## IDCODE
 
-Returns a fixed 32-bit identification value used for device identification and verification.
+Returns a fixed 32-bit identification value used for:
+
+* Device identification
+* JTAG communication verification
+* Shift register verification
+
+Example IDCODE:
+
+```text
+32'h81262776
+```
+
+---
 
 ## BYPASS
 
@@ -60,7 +93,7 @@ Implements a 1-bit bypass register used to minimize scan-chain delay.
 # Project Structure
 
 ```text
-project/
+Task-1/
 │
 ├── riscv.v
 ├── jtag_tap.v
@@ -98,7 +131,13 @@ A separate `jtag_tap.v` module was created implementing:
 
 ## 3. Add JTAG Ports to Top Module
 
-JTAG pins were added to the top-level RISC-V RTL.
+The following JTAG pins were added:
+
+* TCK
+* TMS
+* TDI
+* TDO
+* TRST
 
 ---
 
@@ -110,19 +149,20 @@ The FSM controls:
 * data shifting
 * register updates
 * reset handling
+* pause and exit transitions
 
 ---
 
 ## 5. Implement IDCODE and BYPASS
 
-Two basic JTAG instructions were implemented:
+Two JTAG instructions were implemented:
 
 * IDCODE
 * BYPASS
 
 ---
 
-## 6. Create Testbench
+## 6. Create Self-Checking Testbench
 
 A dedicated Verilog testbench was created to:
 
@@ -130,19 +170,31 @@ A dedicated Verilog testbench was created to:
 * shift IR
 * shift DR
 * verify IDCODE readback
+* automatically display PASS/FAIL status
 
 ---
 
 ## 7. FPGA Pin Mapping
 
-Four free GPIO pins were selected for:
+Five GPIO pins were selected for:
 
 * TCK
 * TMS
 * TDI
 * TDO
+* TRST
 
 Pin mapping was added in `VSDSquadronFM.pcf`.
+
+Example mapping:
+
+```text
+set_io tck   9
+set_io tms   10
+set_io tdi   11
+set_io tdo   19
+set_io trst  21
+```
 
 ---
 
@@ -154,11 +206,15 @@ Pin mapping was added in `VSDSquadronFM.pcf`.
 iverilog -o sim jtag_tap.v tb_jtag_tap.v
 ```
 
+---
+
 ## Run
 
 ```bash
 vvp sim
 ```
+
+---
 
 ## Open Waveform
 
@@ -171,9 +227,19 @@ gtkwave jtag_tap.vcd
 # Simulation Results
 
 ## Terminal Output
+
 ![Terminal](./Task-1/JTAG-Terminal-op.png)
 
+The terminal output confirms:
+
+* Correct TDO serial shifting
+* Successful IDCODE readback
+* PASS condition from self-checking testbench
+
+---
+
 ## GTKWave Verification
+
 ![GTKWAVE](./Task-1/JTAG-gtk-op.png)
 
 The waveform confirms:
@@ -182,7 +248,9 @@ The waveform confirms:
 * Successful IR shifting
 * IDCODE loading
 * DR shifting
-* Serial TDO behavior
+* Correct TDO behavior
+
+---
 
 # Important Signals Observed
 
@@ -192,33 +260,23 @@ The waveform confirms:
 | ir       | Active instruction         |
 | ir_shift | Instruction shift register |
 | dr_shift | Data shift register        |
+| idcode   | Fixed device ID            |
 | tdo      | Serial output              |
 
 ---
 
 # Conclusion
 
-A simplified JTAG TAP controller was successfully implemented and verified in simulation.
+A complete educational JTAG TAP controller was successfully implemented and verified in simulation.
 
 The design supports:
 
-* TAP FSM operation
-* IDCODE instruction
-* BYPASS instruction
-* IR/DR shifting
-* Serial TDO output
-
-Waveform analysis confirmed correct JTAG behavior.
-
-A simplified JTAG TAP controller was successfully implemented and simulated.
-
-The design supports:
-
+* Full TAP FSM operation
 * IDCODE instruction
 * BYPASS instruction
 * IR shifting
 * DR shifting
-* TAP FSM control
+* Serial TDO output
+* Self-checking verification
 
-Simulation verified correct JTAG behavior using GTKWave waveforms.
-
+Simulation and waveform analysis confirmed correct JTAG behavior and successful IDCODE readback.
