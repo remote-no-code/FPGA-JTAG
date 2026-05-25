@@ -7,6 +7,10 @@ reg trst;
 
 wire tdo;
 
+reg [31:0] read_idcode;
+
+integer i; 
+
 jtag_tap dut(
 	.tck(tck),
 	.tms(tms),
@@ -30,10 +34,13 @@ task shift_ir;
 input [3:0] instruction; //4 bit instruction 
 integer i;
 
-begin
 
-	tms = 0; jtag_clk(); 
-	tms = 1; jtag_clk(); 
+begin
+	tms = 0; jtag_clk(); //run-test idle
+	tms = 1; jtag_clk(); //Select DR scan
+	tms = 1; jtag_clk(); //Select IR scan
+	tms = 0; jtag_clk(); //Capture IR
+	tms = 0; jtag_clk(); //Shift Ir
 	
 	
 	for( i = 0; i < 4; i = i + 1) begin   //JTAG is serial send bit one by one
@@ -49,9 +56,11 @@ begin
 	end
 
 	
-	tms =1;
+	tms = 1; //update ir
 	jtag_clk();
 	
+	tms = 0; //run test idle
+	jtag_clk();
 end 
 endtask
 
@@ -61,23 +70,29 @@ integer i;
 
 begin
 
-	tms = 1; jtag_clk();
+	tms = 0; jtag_clk(); //run-test idle
+	tms = 1; jtag_clk(); //select dr scan
+	tms = 0; jtag_clk(); //capture dr
+	tms = 0; jtag_clk(); //shift dr
+	
+	read_idcode = 32'h00000000;
 	
 	for(i = 0; i < 32; i = i + 1) begin
 		
-		tdi = 0;
+		read_idcode[i] = tdo;
+		$display("Bit %d : TDO = %b", i, tdo);
 		
 		if( i == 31)
 			tms = 1;
 		else 
 			tms = 0;
-			
+		
+		tdi=0;
 		jtag_clk();
 		
-		$display("Bit %d : TDO = %b", i, tdo);
 	end
 	
-	
+	tms = 1; jtag_clk(); //update dr
 	tms = 0; jtag_clk();
 	
 end
@@ -93,6 +108,8 @@ initial begin
 	tdi = 0;
 	trst = 1;
 	
+	read_idcode = 32'h0;
+	
 	#20;
 	trst = 0;
 	
@@ -103,6 +120,12 @@ initial begin
 	$display(" Read Data Message ");
 	
 	shift_dr();
+	
+	$display("Read IDCODE = %h", read_idcode);
+	
+	if(read_idcode == 32'h81262776) $display("pass");
+	
+	else $display("fail");
 	
 	#50;
 	$finish;
