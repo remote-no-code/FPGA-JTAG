@@ -1,5 +1,0 @@
-set_io tck  9
-set_io tms  10
-set_io tdi  11
-set_io tdo  19
-set_io trst 21
