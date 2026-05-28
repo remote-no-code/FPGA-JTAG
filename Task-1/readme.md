@@ -84,7 +84,7 @@ Supported Instructions:
 
 ## TAP Controller Architecture Diagram
 
-![Tap Controller](./images/jtag_tap_controller.png)
+![Tap Controller](./images/JTAG_tap_controller.png)
 
 ---
 
@@ -134,7 +134,7 @@ The selected register is connected to the shift logic and serially shifted throu
 
 ## Data Path Diagram
 
-![Data-Register](./images/data_register.png)
+![Data-Register](./images/Data-Register.png)
 
 ---
 
