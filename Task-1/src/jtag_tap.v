@@ -171,7 +171,7 @@ end
 always @(posedge tck) begin
 	
 	if(state == CAPTURE_IR)
-		ir_shift = 4'b0001;
+		ir_shift <= 4'b0001;
 end
 
 always @(posedge tck) begin
