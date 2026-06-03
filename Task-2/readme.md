@@ -521,7 +521,7 @@ Signals displayed:
 
 ```text
 debug_pc
-debug_halted
+state
 ```
 
 ---
@@ -558,6 +558,7 @@ debug_halted
 Signals displayed:
 
 ```text
+debug_halt_req
 debug_halted
 debug_pc
 ```
@@ -577,8 +578,10 @@ debug_pc
 Signals displayed:
 
 ```text
-debug_resume_req
+debug_halt_req
 debug_halted
+debug_pc
+debug_resume_req
 ```
 
 ---
@@ -596,8 +599,11 @@ debug_halted
 Signals displayed:
 
 ```text
+debug_halt_req
+debug_resume_req
 debug_halted
 debug_pc
+state
 ```
 
 ---
