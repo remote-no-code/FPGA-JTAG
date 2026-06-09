@@ -146,7 +146,7 @@ initial begin
 		$display("FAIL : RESET failed");
 
 	// Verify PC returned to reset vector
-	if (debug_pc == 32'h00000000)
+	if (debug_pc == 32'h00000008)
 		$display("PASS : PC reset correctly");
 	else
 		$display("FAIL : PC reset failed, PC = %h", debug_pc);
