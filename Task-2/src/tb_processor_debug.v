@@ -127,6 +127,41 @@ initial begin
         $display("FAIL : PC still frozen");
 
     $display("TASK-2 PROCESSOR DEBUG TEST COMPLETE");
+    
+    // Capture PC before reset
+	pc1 = debug_pc;
+
+	// Send RESET request
+	debug_reset_req = 1;
+	#10;
+	debug_reset_req = 0;
+
+	// Wait for reset processing
+	#100;
+
+	// Verify reset was accepted
+	if (!debug_halted)
+		$display("PASS : RESET accepted");
+	else
+		$display("FAIL : RESET failed");
+
+	// Verify PC returned to reset vector
+	if (debug_pc == 32'h00000000)
+		$display("PASS : PC reset correctly");
+	else
+		$display("FAIL : PC reset failed, PC = %h", debug_pc);
+
+	// Verify processor runs again after reset
+	pc1 = debug_pc;
+	#100;
+	pc2 = debug_pc;
+
+	if (pc1 != pc2)
+		$display("PASS : CPU running after reset");
+	else
+		$display("FAIL : CPU not running after reset");
+
+	$display("TASK-2 PROCESSOR DEBUG TEST COMPLETE");
 
     #100;
     $finish;
