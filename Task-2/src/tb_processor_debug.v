@@ -125,8 +125,6 @@ initial begin
         $display("PASS : PC running again");
     else
         $display("FAIL : PC still frozen");
-
-    $display("TASK-2 PROCESSOR DEBUG TEST COMPLETE");
     
     // Capture PC before reset
 	pc1 = debug_pc;
