@@ -421,8 +421,9 @@ The self-checking testbench validates the complete processor debug sequence and 
 Figure 1A: JTAG TAP Verification (tck, tms, tdi, tdo, trst)
 
 ![PC DEBUG](images/pc_debug_gtk.png)
-Figure 1B: Processor Debug Verification showing HALT, RESUME,
-debug_halted, debug_pc and PC freeze/resume behaviour
+
+Figure 1B: Processor Debug Verification showing HALT, RESUME, debug_halted, debug_pc and PC freeze/resume behaviour
+
 ---
 
 ## A. JTAG TAP Verification
@@ -674,7 +675,7 @@ debug_halted
 
 ### PC Reset Verification
 
-![PC Reset Terminal](images/pc_reset_correctly.png)
+![PC Reset Terminal](images/pc_reset_correctly_terminal.png)
 
 
 ![PC Reset GTKWave](images/pc_reset_verification_gtk.png)
