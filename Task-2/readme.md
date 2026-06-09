@@ -139,7 +139,7 @@ allowing real-time observation of processor execution.
 
 ![Block Diagram](images/block_diagram.png)
 
-*Figure 1: Detailed JTAG TAP and RISC-V Debug Interface Architecture.*
+*Figure 0: Detailed JTAG TAP and RISC-V Debug Interface Architecture.*
 
 The architecture consists of:
 
@@ -335,6 +335,22 @@ The following functionality was tested:
 * PC Frozen
 * RESUME Accepted
 * PC Running Again
+* RESET Accepted
+* PC Reset Verification
+* CPU Running After Reset
+
+The verification sequence follows the complete processor debug workflow:
+
+1. CPU starts running and the Program Counter increments normally.
+2. A HALT request is issued.
+3. The processor enters the halted state.
+4. The Program Counter stops changing.
+5. A RESUME request is issued.
+6. The processor exits the halted state.
+7. The Program Counter resumes incrementing.
+8. A RESET request is issued.
+9. The Program Counter returns to the reset vector.
+10. The processor restarts execution from the beginning.
 
 ---
 
@@ -382,7 +398,36 @@ vvp simv
 
 # Verification Results
 
+## Verification Flow
+
+The self-checking testbench validates the complete processor debug sequence and confirms correct operation of all implemented debug controls.
+
+| Step | Operation                               | Evidence Section        |
+| ---- | --------------------------------------- | ----------------------- |
+| 1    | CPU starts running                      | CPU Running             |
+| 2    | HALT request issued                     | HALT Accepted           |
+| 3    | Processor halted                        | HALT Accepted           |
+| 4    | Program Counter frozen                  | PC Frozen               |
+| 5    | RESUME request issued                   | RESUME Accepted         |
+| 6    | Processor resumed                       | RESUME Accepted         |
+| 7    | Program Counter running again           | PC Running Again        |
+| 8    | RESET request issued                    | RESET Accepted          |
+| 9    | Program Counter returns to reset vector | PC Reset Verification   |
+| 10   | Processor restarts execution            | CPU Running After Reset |
+
+### Complete Processor Debug Flow
+
+![JTAG TAP](images/jtag_tap_gtk.png)
+Figure 1A: JTAG TAP Verification (tck, tms, tdi, tdo, trst)
+
+![PC DEBUG](images/pc_debug_gtk.png)
+
+Figure 1B: Processor Debug Verification showing HALT, RESUME, debug_halted, debug_pc and PC freeze/resume behaviour
+
+---
+
 ## A. JTAG TAP Verification
+
 
 ### DEBUG_STATUS Verification
 
@@ -588,7 +633,7 @@ debug_resume_req
 
 ### PC Running Again
 
-![PC Running Terminal](images/pc_running_terminal.png)
+![PC Running Terminal](images/pc_running_again_terminal.png)
 
 *Figure 20: Terminal output confirming successful continuation of processor execution after resume.*
 
@@ -608,6 +653,55 @@ state
 
 ---
 
+### RESET Accepted
+
+![RESET Accepted Terminal](images/reset_accepted_terminal.png)
+
+*Figure 22: Terminal output confirming successful acceptance of the RESET request.*
+
+![RESET Accepted GTKWave](images/reset_accepted_gtk.png)
+
+*Figure 23: GTKWave waveform showing assertion of debug_reset_req followed by Program Counter reset to the reset vector.*
+
+Signals displayed:
+
+```text
+debug_reset_req
+debug_pc
+debug_halted
+```
+
+---
+
+### PC Reset Verification
+
+![PC Reset Terminal](images/pc_reset_correctly_terminal.png)
+
+
+![PC Reset GTKWave](images/pc_reset_verification_gtk.png)
+
+*Figure 24: GTKWave waveform showing the Program Counter returning to the reset vector after a RESET request and subsequently resuming execution from the beginning.*
+
+Signals displayed:
+
+```text
+debug_pc
+debug_halted
+debug_resume_req
+debug_reset_req
+```
+
+---
+
+### CPU Running After Reset
+
+![CPU ruuning after Reset](images/cpu_running_after_reset_terminal.png)
+
+
+The image confirms that following the RESET request, the Program Counter returns to the reset vector and begins incrementing again, demonstrating successful processor restart and continued instruction execution.
+
+---
+
 # Final Simulation Output
 
 ```text
@@ -616,6 +710,9 @@ PASS : HALT accepted
 PASS : PC frozen
 PASS : RESUME accepted
 PASS : PC running again
+PASS : RESET accepted
+PASS : PC reset correctly
+PASS : CPU running after reset
 
 TASK-2 PROCESSOR DEBUG TEST COMPLETE
 ```
@@ -625,4 +722,3 @@ TASK-2 PROCESSOR DEBUG TEST COMPLETE
 # Conclusion
 
 Task 2 successfully integrates the JTAG TAP controller with the RISC-V processor and implements a functional debug interface. The processor can be halted, resumed, reset, and monitored externally through JTAG instructions. Verification through simulation and waveform analysis confirms correct operation of all implemented debug features. The design establishes a robust foundation for FPGA-based processor debugging and future extensions such as register inspection and memory access.
-
