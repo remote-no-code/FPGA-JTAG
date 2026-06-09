@@ -677,10 +677,11 @@ debug_halted
 
 ![PC Reset Terminal](images/pc_reset_correctly_terminal.png)
 
+_Figure 24: Terminal output verifies the successful PC Reset._
 
 ![PC Reset GTKWave](images/pc_reset_verification_gtk.png)
 
-*Figure 24: GTKWave waveform showing the Program Counter returning to the reset vector after a RESET request and subsequently resuming execution from the beginning.*
+*Figure 25: GTKWave waveform showing the Program Counter returning to the reset vector after a RESET request and subsequently resuming execution from the beginning.*
 
 Signals displayed:
 
@@ -697,8 +698,7 @@ debug_reset_req
 
 ![CPU ruuning after Reset](images/cpu_running_after_reset_terminal.png)
 
-
-The image confirms that following the RESET request, the Program Counter returns to the reset vector and begins incrementing again, demonstrating successful processor restart and continued instruction execution.
+*Figure 26: The image confirms that following the RESET request, the Program Counter returns to the reset vector and begins incrementing again, demonstrating successful processor restart and continued instruction execution.*
 
 ---
 
@@ -718,7 +718,13 @@ TASK-2 PROCESSOR DEBUG TEST COMPLETE
 ```
 
 ---
+# Synthesis Results
 
+![Synthesis](images/synthesis.png)
+
+_Figure 27: Yosys synthesis report showing FPGA resource utilization for the complete JTAG-controlled RISC-V processor system._
+
+---
 # Conclusion
 
 Task 2 successfully integrates the JTAG TAP controller with the RISC-V processor and implements a functional debug interface. The processor can be halted, resumed, reset, and monitored externally through JTAG instructions. Verification through simulation and waveform analysis confirms correct operation of all implemented debug features. The design establishes a robust foundation for FPGA-based processor debugging and future extensions such as register inspection and memory access.
