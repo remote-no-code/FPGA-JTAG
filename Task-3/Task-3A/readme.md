@@ -212,22 +212,6 @@ TASK 3A PASSED
 
 ---
 
-# Results Summary
-
-| Verification Item           | Status |
-| --------------------------- | ------ |
-| TAP State Machine           | PASS   |
-| Instruction Register        | PASS   |
-| Data Register               | PASS   |
-| IDCODE Register             | PASS   |
-| Simulation Verification     | PASS   |
-| FPGA Programming            | PASS   |
-| External JTAG Access        | PASS   |
-| Raspberry Pi Pico Interface | PASS   |
-| Task 3A Requirement         | PASS   |
-
----
-
 # Conclusion
 
 A custom JTAG TAP controller was successfully implemented and verified on the VSDSquadron FM FPGA.
