@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements a custom IEEE 1149.1-style JTAG Test Access Port (TAP) controller on the VSDSquadron FM FPGA and verifies its functionality using an external Raspberry Pi Pico configured as a software-based JTAG master.
+This project implements a custom IEEE 1149.1-style JTAG Test Access Port (TAP) controller on the VSDSquadron FM FPGA and verifies its functionality using an external Raspberry Pi Pico configured as a software-based JTAG master, while FT2232H/ OpenOCD/ Ashling validation will be a later task.
 
 The objective of Task 3A was to successfully access the FPGA through the JTAG interface and read the device identification code (IDCODE) through the implemented TAP controller.
 
