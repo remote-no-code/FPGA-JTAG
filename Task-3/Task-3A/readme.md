@@ -53,7 +53,7 @@ The verification setup consists of two major components:
 ```text
 Task-3A/
 │
-├── rtl/
+├── src/
 │   ├── jtag_tap.v
 │   └── top_jtag_idcode.v
 │   └── VSDSquadronFM.pcf
