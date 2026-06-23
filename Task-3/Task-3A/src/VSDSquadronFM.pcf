@@ -1,8 +1,17 @@
-# JTAG Interface Pins
+# JTAG Test Clock (input from Raspberry Pi Pico GP0)
 set_io tck   9
+
+# JTAG Test Mode Select (input from Raspberry Pi Pico GP1)
 set_io tms   10
+
+# JTAG Test Data Input (input from Raspberry Pi Pico GP2)
 set_io tdi   11
+
+# JTAG Test Data Output (output to Raspberry Pi Pico GP3)
 set_io tdo   19
+
+# JTAG TAP Reset (input from Raspberry Pi Pico GP4)
 set_io trst  21
 
+# Status LED used for hardware verification
 set_io led   39
