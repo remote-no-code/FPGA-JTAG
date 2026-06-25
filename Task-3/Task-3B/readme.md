@@ -211,9 +211,9 @@ vvp sim
 
 > **Figure 5 – Verification Log**
 
-*[LOG A](images/logsA.png)*
+*![LOG A](images/logsA.png)*
 
-*[LOG B](images/logsB.png)*
+*![LOG B](images/logsB.png)*
 
 The verification log confirms:
 
