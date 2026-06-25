@@ -65,43 +65,58 @@ This technique provides reliable event transfer while significantly reducing the
 
 *![CDC Architecture](images/CDC_Architecture.png)*
 
-### Architecture Description
+## Architecture Description
 
-The architecture consists of three functional regions:
+The CDC architecture is divided into three functional regions that work together to safely transfer JTAG debug requests from the **JTAG clock domain (TCK)** to the **processor clock domain (CLK)**.
 
-### **JTAG Clock Domain (TCK)**
+---
 
-The JTAG TAP Controller decodes debug instructions and generates three asynchronous debug requests:
+### 1. JTAG Clock Domain (TCK)
 
-* `debug_halt_req_tck`
-* `debug_resume_req_tck`
-* `debug_reset_req_tck`
+The **JTAG TAP Controller** operates in the TCK domain and is responsible for decoding JTAG debug instructions. Based on the received instruction, it generates one of the following asynchronous debug requests:
 
-### **Clock Domain Crossing Logic**
+| Signal                 | Function                                    |
+| ---------------------- | ------------------------------------------- |
+| `debug_halt_req_tck`   | Requests the processor to halt execution.   |
+| `debug_resume_req_tck` | Requests the processor to resume execution. |
+| `debug_reset_req_tck`  | Requests a processor reset.                 |
 
-Each request passes through three stages:
+These requests originate in the JTAG clock domain and must be safely transferred to the processor clock domain before they can be used.
 
-**Toggle Generation**
+---
 
-* Converts each debug request into a persistent toggle event.
+### 2. Clock Domain Crossing (CDC) Logic
 
-**Two-Flip-Flop Synchronizer**
+To ensure reliable communication between the asynchronous clock domains, every debug request passes through three processing stages.
 
-* Safely transfers the toggle into the processor clock domain.
-* Reduces the probability of metastability.
+#### Stage 1 – Toggle Generation
 
-**Edge Detector**
+Each incoming debug request is converted into a **toggle event** rather than a single-cycle pulse. Since toggle events persist until sampled, they can be reliably detected by the destination clock domain without the risk of missing short pulses.
 
-* Detects synchronized toggle transitions.
-* Generates a single-clock pulse.
+#### Stage 2 – Two-Flip-Flop Synchronizer
 
-### **Processor Clock Domain (CLK)**
+The generated toggle is synchronized into the processor clock domain using a **two-flip-flop synchronizer**. This significantly reduces the probability of metastability propagating into downstream logic and provides a stable synchronized signal.
 
-The synchronized debug pulses control the processor model:
+#### Stage 3 – Edge Detection
 
-* HALT stops program execution.
-* RESUME restarts execution.
-* RESET clears the Program Counter.
+An edge detector monitors the synchronized toggle transition and regenerates it as a **single-clock pulse** in the processor clock domain. This pulse is then used to trigger the required debug operation.
+
+> **Why use a toggle-based synchronizer?**
+> A single-cycle pulse generated in the TCK domain may occur entirely between two CLK edges and therefore be missed by the processor. Converting the request into a toggle guarantees that the event persists long enough to be detected after synchronization.
+
+---
+
+### 3. Processor Clock Domain (CLK)
+
+The synchronized debug pulses are received by the processor, where they control its execution state.
+
+| Debug Request | Processor Action                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| **HALT**      | Stops Program Counter (PC) updates and halts execution.                                    |
+| **RESUME**    | Restarts execution by allowing the Program Counter to continue incrementing.               |
+| **RESET**     | Resets the Program Counter to `0x00000000` and returns the processor to its initial state. |
+
+This separation of responsibilities ensures that debug commands generated in the JTAG interface are safely synchronized and executed within the processor clock domain, maintaining reliable operation across asynchronous clock boundaries.
 
 ---
 
