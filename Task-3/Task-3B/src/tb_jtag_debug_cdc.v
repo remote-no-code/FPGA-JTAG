@@ -5,6 +5,7 @@ module tb_jtag_debug_cdc;
     //-----------------------------------------------------
     // Clock Generation and Reset Signals
     //-----------------------------------------------------
+
     reg clk;
     reg tck;
     reg reset;
@@ -73,7 +74,37 @@ module tb_jtag_debug_cdc;
     integer pc_before;
     integer pc_after;
 
+
+
     //-----------------------------------------------------
+    // Simple Processor Model driven by CDC outputs
+    //-----------------------------------------------------
+	always @(posedge clk or posedge reset)
+	begin
+		if (reset)
+		begin
+		    halted <= 1'b0;
+		    pc <= 32'h00000000;
+		end
+		else if (debug_reset_req_clk)
+		begin
+		    halted <= 1'b0;
+		    pc <= 32'h00000000;
+		end
+		else
+		begin
+		    if (debug_halt_req_clk)
+		        halted <= 1'b1;
+		    else if (debug_resume_req_clk)
+		        halted <= 1'b0;
+
+		    if (halted)
+		        pc <= pc;
+		    else
+		        pc <= pc + 4;
+		end
+	end
+	//-----------------------------------------------------
     // Verification Sequence
     //-----------------------------------------------------
     initial begin
@@ -87,10 +118,6 @@ module tb_jtag_debug_cdc;
         debug_halt_req_tck   = 0;
         debug_resume_req_tck = 0;
         debug_reset_req_tck  = 0;
-
-        // Initial processor state
-        pc     = 32'h00000000;
-        halted = 1'b0;
 
         $display("==========================================================");
         $display("        JTAG Debug Clock Domain Crossing Verification");
@@ -109,9 +136,9 @@ module tb_jtag_debug_cdc;
         //-------------------------------------------------
         // Step 1 : Processor Verification
         //-------------------------------------------------
-        repeat (5)
+        repeat (5) begin
             @(posedge clk);
-
+		end
         $display("");
         $display("----------------------------------------------------------");
         $display("Step 1 : Processor Verification");
@@ -125,10 +152,7 @@ module tb_jtag_debug_cdc;
         // Simulate processor execution
         repeat (5) begin
             @(posedge clk);
-            if (!halted)
-                pc = pc + 4;
-        end
-
+		end
         pc_after = pc;
 
         if (pc_after != pc_before) begin
@@ -162,26 +186,41 @@ module tb_jtag_debug_cdc;
 
         @(negedge tck);
         debug_halt_req_tck = 1'b0;
+        // Verify HALT pulse width (event-based)
+        wait(debug_halt_req_clk);
 
-        repeat (5)
+		$display("[PASS] HALT pulse detected");
+
+		@(posedge clk);
+
+        if (debug_halt_req_clk)
+        begin
             @(posedge clk);
 
-        halted = 1'b1;
+            if (debug_halt_req_clk)
+            begin
+                $display("[FAIL] HALT pulse wider than 1 CLK cycle");
+                $finish;
+            end
 
-        if (halted) begin
-            $display("[PASS] HALT request synchronized successfully.");
-            $display("[PASS] Processor entered HALT state.");
+            $display("[PASS] HALT pulse width verified (1 CLK cycle)");
         end
-        else begin
-            $display("FAIL : Processor did not enter HALT state.");
+        else
+        begin
+            $display("[FAIL] HALT pulse shorter than 1 CLK cycle");
             $finish;
         end
 
+        wait(halted);
+
+        $display("[PASS] HALT request synchronized successfully.");
+        $display("[PASS] Processor entered HALT state.");
+
         pc_before = pc;
 
-        repeat (10)
+        repeat (10) begin
             @(posedge clk);
-
+		end
         if (pc == pc_before) begin
             $display("[PASS] Program Counter remained constant.");
             $display("Current PC : 0x%08h", pc);
@@ -209,29 +248,40 @@ module tb_jtag_debug_cdc;
 
         @(negedge tck);
         debug_resume_req_tck = 1'b0;
+        // Verify RESUME pulse width (event-based)
+        wait(debug_resume_req_clk);
+        $display("[PASS] RESUME pulse detected");
 
-        repeat (5)
+        @(posedge clk);
+
+        if (debug_resume_req_clk)
+        begin
             @(posedge clk);
 
-        halted = 1'b0;
+            if (debug_resume_req_clk)
+            begin
+                $display("[FAIL] RESUME pulse wider than 1 CLK cycle");
+                $finish;
+            end
 
-        if (!halted) begin
-            $display("[PASS] RESUME request synchronized successfully.");
-            $display("[PASS] Processor resumed execution.");
+            $display("[PASS] RESUME pulse width verified (1 CLK cycle)");
         end
-        else begin
-            $display("FAIL : Processor did not resume execution.");
+        else
+        begin
+            $display("[FAIL] RESUME pulse shorter than 1 CLK cycle");
             $finish;
         end
+
+        wait(!halted);
+
+        $display("[PASS] RESUME request synchronized successfully.");
+        $display("[PASS] Processor resumed execution.");
 
         pc_before = pc;
 
         repeat (10) begin
             @(posedge clk);
-            if (!halted)
-                pc = pc + 4;
-        end
-
+		end
         pc_after = pc;
 
         if (pc_after != pc_before) begin
@@ -262,21 +312,45 @@ module tb_jtag_debug_cdc;
         @(negedge tck);
         debug_reset_req_tck = 1'b0;
 
-        repeat (5)
-            @(posedge clk);
+        // Verify RESET pulse width
+	wait(debug_reset_req_clk);
 
-        pc = 32'h00000000;
+	$display("[PASS] RESET pulse detected");
 
-        if (pc == 32'h00000000) begin
-            $display("[PASS] RESET request synchronized successfully.");
-            $display("[PASS] Processor reset completed.");
-            $display("Program Counter reset to : 0x%08h", pc);
-        end
-        else begin
-            $display("FAIL : Processor reset failed.");
-            $finish;
-        end
+	@(posedge clk);
 
+	if (debug_reset_req_clk)
+	begin
+	    @(posedge clk);
+
+	    if (debug_reset_req_clk)
+	    begin
+		$display("[FAIL] RESET pulse wider than 1 CLK cycle");
+		$finish;
+	    end
+
+	    $display("[PASS] RESET pulse width verified (1 CLK cycle)");
+	end
+	else
+	begin
+	    $display("[FAIL] RESET pulse shorter than 1 CLK cycle");
+	    $finish;
+	end
+
+
+	wait(pc == 32'h00000000);
+
+	if (pc == 32'h00000000)
+	begin
+	    $display("[PASS] RESET request synchronized successfully.");
+	    $display("[PASS] Processor reset completed.");
+	    $display("Program Counter reset to : 0x%08h", pc);
+	end
+	else
+	begin
+	    $display("[FAIL] Processor reset failed.");
+	    $finish;
+	end
         //-------------------------------------------------
         // Verification Summary
         //-------------------------------------------------
@@ -304,7 +378,7 @@ module tb_jtag_debug_cdc;
         $display("[PASS] RESET request transferred correctly");
         $display("");
 
-        $display("Processor Behavior");
+        $display("Processor Verification");
         $display("------------------");
         $display("[PASS] Processor halted successfully");
         $display("[PASS] Processor resumed successfully");
