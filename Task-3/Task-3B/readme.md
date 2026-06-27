@@ -55,12 +55,12 @@ Task3B/
 ├── README.md
 │
 └── images/
-    ├── 01_CDC_Architecture.png
-    ├── 02_halt_sync.png
-    ├── 03_resume_sync.png
-    ├── 04_reset_sync.png
-    ├── 05_logsA.png
-    └── 06_logsB.png
+    ├── CDC_Architecture.png
+    ├── halt_sync.png
+    ├── resume_sync.png
+    ├── reset_sync.png
+    ├── Terminal_1.png
+    └── Terminal_2.png
 ```
 
 ---
@@ -78,7 +78,7 @@ This approach provides reliable event transfer while significantly reducing the 
 # System Architecture
 
 <p align="center">
-    <img src="images/01_CDC_Architecture.png" width="900">
+    <img src="images/CDC_Architecture.png" width="900">
 </p>
 
 <p align="center">
@@ -185,7 +185,7 @@ Three independent verification scenarios are used to validate the CDC implementa
 ## HALT Synchronization
 
 <p align="center">
-<img src="images/02_halt_sync.png" width="900">
+<img src="images/halt_sync.png" width="900">
 </p>
 
 <p align="center">
@@ -206,7 +206,7 @@ Verification sequence:
 ## RESUME Synchronization
 
 <p align="center">
-<img src="images/03_resume_sync.png" width="900">
+<img src="images/resume_sync.png" width="900">
 </p>
 
 <p align="center">
@@ -226,7 +226,7 @@ Verification sequence:
 ## RESET Synchronization
 
 <p align="center">
-<img src="images/04_reset_sync.png" width="900">
+<img src="images/reset_sync.png" width="900">
 </p>
 
 <p align="center">
@@ -258,11 +258,11 @@ vvp sim
 # Verification Results
 
 <p align="center">
-<img src="images/05_logsA.png" width="900">
+<img src="images/Terminal_1.png" width="900">
 </p>
 
 <p align="center">
-<img src="images/06_logsB.png" width="900">
+<img src="images/Terminal_2.png" width="900">
 </p>
 
 <p align="center">
@@ -310,13 +310,3 @@ The implementation employs a **toggle-based synchronization technique**, a **two
 This modular CDC implementation provides a robust foundation for future integration with the JTAG TAP Controller developed in **Task 3A** and a complete **RISC-V debug subsystem**.
 
 ---
-
-# Future Improvements
-
-Future work may include:
-
-* Integration with the complete JTAG TAP Controller.
-* Connection to a RISC-V processor core.
-* FPGA-based hardware validation.
-* Integration with OpenOCD for end-to-end JTAG debug support.
-* Support for additional JTAG debug commands and status registers.
