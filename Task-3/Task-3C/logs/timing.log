@@ -1,0 +1,5 @@
+// Reading input .pcf file..
+// Reading input .asc file..
+// Reading 5k chipdb file..
+// Creating timing netlist..
+// Timing estimate: 65.02 ns (15.38 MHz)
