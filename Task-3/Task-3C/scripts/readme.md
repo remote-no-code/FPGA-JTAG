@@ -44,14 +44,14 @@ The interface operates at **3.3V logic levels**.
 
 The firmware uses the following JTAG instruction encodings:
 
-| Instruction | Value | Description |
-|-------------|-------|-------------|
-| IDCODE | 0x1 | Read FPGA identification code |
-| DEBUG_CTRL | 0x2 | Write debug control commands |
-| DEBUG_STATUS | 0x3 | Read processor status |
-| DEBUG_PC | 0x4 | Read processor program counter |
+| Instruction | Opcode | Description |
+|------------|:------:|-------------|
+| **IDCODE** | `0x1` | Selects the 32-bit FPGA Identification Code register (`0x81262776`). |
+| **DEBUG_CTRL** | `0x2` | Selects the Debug Control register used to issue HALT, RESUME, and RESET requests to the processor. |
+| **DEBUG_STATUS** | `0x3` | Selects the Debug Status register, which reports the current processor execution state (`debug_halted`). |
+| **DEBUG_PC** | `0x4` | Selects the Debug Program Counter register, providing read access to the processor's current Program Counter (`debug_pc`). |
+| **BYPASS** | `0xF` | Selects the 1-bit BYPASS register, allowing the TAP to be bypassed during JTAG scan operations. |
 
----
 
 ## DEBUG_CTRL Commands
 
