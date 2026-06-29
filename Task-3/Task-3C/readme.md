@@ -79,21 +79,21 @@ The project is organized into hardware design files, Pico firmware, build script
 
 ```text
 Task-3C/
-│
-├── emitter_uart.v
-├── riscv.v
-├── jtag_tap.v
-├── jtag_debug_cdc.v
-├── clockworks.v
-├── gpio_ctrl_ip.v
-├── uart.v
-├── timer.v
-├── femtopll.v
-├── tb_step2.v
-├── tb_Step3.v
-├── firmware.hex
-├── VSDSquadronFM.pcf
-├── Makefile
+├── src/
+│   ├── emitter_uart.v
+│   ├── riscv.v
+│   ├── jtag_tap.v
+│   ├── jtag_debug_cdc.v
+│   ├── clockworks.v
+│   ├── gpio_ctrl_ip.v
+│   ├── uart.v
+│   ├── timer.v
+│   ├── femtopll.v
+│   ├── tb_step2.v
+│   ├── tb_Step3.v
+│   ├── firmware.hex
+│   ├── VSDSquadronFM.pcf
+│   └── Makefile
 │
 ├── scripts/
 │   ├── pico_halt_resume_reader.ino
@@ -106,7 +106,7 @@ Task-3C/
 │   └── programming.log
 │
 ├── images/
-ch│   ├── system_architecture.png
+│   ├── system_architecture.png
 │   ├── jtag_tap_controller_architecture.png
 │   ├── cdc_architecture.png
 │   ├── fpga_bitstream.png
