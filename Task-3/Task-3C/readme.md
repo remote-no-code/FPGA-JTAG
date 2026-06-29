@@ -455,6 +455,11 @@ The design exposes the following JTAG interface signals.
 
 The processor operates from the onboard FPGA system clock while the JTAG TAP is driven independently using the external JTAG clock supplied by the Raspberry Pi Pico.
 
+## FPGA Bitstream
+<p align="center">
+  <img src="images/fpga_bitstream.png" alt="FPGA Bitstream" width="700">
+</p>
+
 ---
 
 # Raspberry Pi Pico Firmware
@@ -612,10 +617,6 @@ This confirms that processor execution actually stops during HALT and resumes co
 
 The following figures should accompany this section.
 
-## FPGA Bitstream
-<p align="center">
-  <img src="images/fpga_bitstream.png" alt="FPGA Bitstream" width="700">
-</p>
 
 These images document the complete hardware validation process, from FPGA compilation and programming to successful processor control using the Raspberry Pi Pico.
 
@@ -751,9 +752,7 @@ The processor successfully restarts execution following the RESET request.
 
 
 ## Pico Output
-<p align="center">
-  <img src="images/pico_output.png" alt="Pico Output" width="700">
-</p>
+![Pico Output](images/pico_output.png)
 
 ---
 
