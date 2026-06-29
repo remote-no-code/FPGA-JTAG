@@ -336,6 +336,18 @@ A RESET request reinitializes the processor state and restarts execution from th
 
 This hardware interface allows complete processor control without requiring any modifications to the instruction set or application software.
 
+## Simulation
+
+Before hardware validation, the design was verified using simulation.
+
+| Testbench | Purpose |
+|------------|----------|
+| tb_step2.v | CPU debug verification |
+| tb_step3.v | Complete JTAG + CDC + CPU verification |
+
+Simulation waveforms confirmed correct JTAG state transitions, debug register access, and processor HALT/RESUME behavior prior to FPGA deployment.
+
+
 # FPGA Build and Hardware Validation
 
 ## FPGA Build Flow
