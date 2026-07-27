@@ -24,16 +24,6 @@ The complete design was verified through simulation and successfully deployed on
 - FPGA implementation on VSDSquadron FM (Lattice iCE40UP5K)
 - Hardware validation using Raspberry Pi Pico
 
-## System Architecture
-
-<p align="center">
-    <img src="images/riscv_debug_architecture.png" width="900">
-</p>
-
-<p align="center">
-<b>Figure 1.</b> High-Level RISC-V Debug Architecture
-</p>
-
 # Features
 
 ### JTAG Debug Transport Module (DTM)
@@ -161,31 +151,6 @@ The complete debug path consists of six major components that together enable co
 ## Debug Communication Flow
 
 Every debug operation follows the same communication path:
-
-```text
-Raspberry Pi Pico
-        │
-        ▼
-JTAG Interface
-        │
-        ▼
-Debug Transport Module (DTM)
-        │
-        ▼
-Debug Module Interface (DMI)
-        │
-        ▼
-Debug Module (DM)
-        │
-        ▼
-Core Debug Adapter
-        │
-        ▼
-Abstract Access Unit (AAU)
-        │
-        ▼
-RISC-V Processor
-```
 
 <p align="center">
     <img src="images/data_flow.png" width="900">
