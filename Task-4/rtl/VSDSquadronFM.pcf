@@ -1,0 +1,22 @@
+set_io CLK     20
+set_io RESET   23
+
+set_io TXD     4
+set_io RXD     3
+
+
+# JTAG Interface Pins
+set_io tck   9
+set_io tms   10
+set_io tdi   11
+set_io tdo   19
+set_io trst  21
+
+set_io LED1 26
+set_io LED2 27
+set_io LED3 28
+set_io LED4 31
+set_io LED5 32
+set_io LED6 34
+set_io LED7 35
+
