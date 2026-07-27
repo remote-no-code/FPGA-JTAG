@@ -27,7 +27,7 @@ The complete design was verified through simulation and successfully deployed on
 ## System Architecture
 
 <p align="center">
-    <img src="docs/images/riscv_debug_architecture.png" width="900">
+    <img src="images/riscv_debug_architecture.png" width="900">
 </p>
 
 <p align="center">
@@ -363,7 +363,7 @@ The RISC-V debug subsystem was validated on the **VSDSquadron FM FPGA** using a 
 ## Hardware Setup
 
 <p align="center">
-    <img src="docs/images/hardware_setup.jpg" width="750">
+    <img src="images/hardware_setup.jpg" width="750">
 </p>
 
 <p align="center">
@@ -555,11 +555,11 @@ The debugger performs the following operations:
 ## Terminal Output
 
 <p align="center">
-    <img src="docs/images/terminal_output_1.png" width="850"><br><br>
-    <img src="docs/images/terminal_output_2.png" width="850"><br><br>
-    <img src="docs/images/terminal_output_3.png" width="850"><br><br>
-    <img src="docs/images/terminal_output_4.png" width="850"><br><br>
-    <img src="docs/images/terminal_output_5.png" width="850">
+    <img src="images/terminal_output_1.png" width="850"><br><br>
+    <img src="images/terminal_output_2.png" width="850"><br><br>
+    <img src="images/terminal_output_3.png" width="850"><br><br>
+    <img src="images/terminal_output_4.png" width="850"><br><br>
+    <img src="images/terminal_output_5.png" width="850">
 </p>
 
 <p align="center">
